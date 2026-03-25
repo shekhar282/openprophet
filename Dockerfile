@@ -1,10 +1,11 @@
 # ── Stage 1: Build Go binary for linux/amd64 ──────────────────────
-FROM golang:1.22-alpine AS go-builder
+FROM golang:1.22 AS go-builder
 WORKDIR /build
+RUN apt-get update && apt-get install -y --no-install-recommends gcc libc6-dev libsqlite3-dev && rm -rf /var/lib/apt/lists/*
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o prophet_bot ./cmd/bot
+RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o prophet_bot ./cmd/bot
 
 # ── Stage 2: Final image ───────────────────────────────────────────
 FROM oven/bun:1.3-slim
@@ -12,7 +13,7 @@ WORKDIR /app
 
 # Install system deps + build tools for native modules + opencode CLI
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl ca-certificates python3 make g++ && \
+    curl ca-certificates python3 make g++ libsqlite3-0 && \
     rm -rf /var/lib/apt/lists/* && \
     bun install -g opencode-ai
 
