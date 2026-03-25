@@ -1,0 +1,10 @@
+node_modules
+prophet_bot
+*.log
+.env
+data/
+activity_logs/
+decisive_actions/
+.git
+__pycache__
+*.pyc

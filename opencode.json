@@ -1,0 +1,9 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "openprophet": {
+      "type": "local",
+      "command": ["bun", "/Users/shekharsaini/trade_bot/mcp-server.js"]
+    }
+  }
+}

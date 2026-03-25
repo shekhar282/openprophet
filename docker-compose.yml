@@ -1,0 +1,25 @@
+services:
+  agent:
+    image: shekhar282/openprophet:latest
+    restart: unless-stopped
+    ports:
+      - "3737:3737"
+    env_file:
+      - .env
+    environment:
+      - AGENT_PORT=3737
+      - TRADING_BOT_PORT=4534
+      - TRADING_BOT_URL=http://localhost:4534
+    volumes:
+      - agent_data:/app/data
+      - agent_logs:/app/activity_logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3737"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  agent_data:
+  agent_logs:
