@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install Node deps first (layer cache)
 COPY package.json bun.lock* ./
-RUN bun install --ignore-scripts=false
+RUN bun install
 
 # Copy Go binary
 COPY --from=go-builder /build/prophet_bot ./prophet_bot
