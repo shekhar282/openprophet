@@ -10,15 +10,15 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o prophet_bot ./cmd/bot
 FROM oven/bun:1.3-slim
 WORKDIR /app
 
-# Install system deps + opencode CLI
+# Install system deps + build tools for native modules + opencode CLI
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl ca-certificates && \
+    curl ca-certificates python3 make g++ && \
     rm -rf /var/lib/apt/lists/* && \
     bun install -g opencode-ai
 
 # Install Node deps first (layer cache)
 COPY package.json bun.lock* ./
-RUN bun install --frozen-lockfile
+RUN bun install --ignore-scripts=false
 
 # Copy Go binary
 COPY --from=go-builder /build/prophet_bot ./prophet_bot
