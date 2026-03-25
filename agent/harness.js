@@ -111,10 +111,11 @@ Heartbeat control:
 export function checkCliAuth() {
   // API key in env takes precedence — OpenCode picks it up automatically
   if (process.env.ANTHROPIC_API_KEY) return true;
+  if (process.env.OPENAI_API_KEY) return true;
   try {
     const out = execSync('opencode auth list 2>&1', { timeout: 5000, encoding: 'utf-8' });
-    // Look for Anthropic credential (oauth or env) in the output
-    return out.includes('Anthropic');
+    // Accept Anthropic or OpenAI credentials
+    return out.includes('Anthropic') || out.includes('OpenAI');
   } catch {
     return false;
   }
@@ -298,7 +299,7 @@ export class AgentHarness {
     if (!this._agentConfig) throw new Error(`Agent not found for sandbox ${this._sandboxConfig.id}`);
 
     const account = this._resolveAccount();
-    const model = this._agentConfig.model || this._sandboxConfig.agent?.model || 'anthropic/claude-sonnet-4-6';
+    const model = this._agentConfig.model || this._sandboxConfig.agent?.model || 'openai/gpt-4o-mini';
 
     this.state.activeAgentId = this._agentConfig.id;
     this.state.activeAccountId = account?.id || this._sandboxConfig.accountId || null;
@@ -637,7 +638,7 @@ ${userBlock}`;
     return new Promise((resolve, reject) => {
       const sessionEpoch = this._sessionEpoch;
       // OpenCode model format: anthropic/claude-sonnet-4-6
-      const ocModel = model?.includes('/') ? model : `anthropic/${model || 'claude-sonnet-4-6'}`;
+      const ocModel = model?.includes('/') ? model : `openai/${model || 'gpt-4o-mini'}`;
 
       // Check max tool rounds from permissions
       const perms = this._resolvePermissions();
