@@ -112,7 +112,7 @@ function defaultAgents() {
       description: 'Aggressive discretionary options trader with scalping overlay',
       systemPromptTemplate: 'default',
       strategyId: 'default',
-      model: 'anthropic/claude-sonnet-4-6',
+      model: 'openai/gpt-4o-mini',
       heartbeatOverrides: {},
       customSystemPrompt: '',
       createdAt: new Date().toISOString(),
@@ -133,7 +133,7 @@ function defaultAgents() {
 - Stop loss at -10%, take profit at +30%
 - Maximum 5 positions at once`,
       strategyId: null,
-      model: 'anthropic/claude-sonnet-4-6',
+      model: 'openai/gpt-4o-mini',
       heartbeatOverrides: {
         pre_market: 1800,
         market_open: 300,
@@ -215,7 +215,7 @@ function defaultModels() {
   }
   
   return [
-    { id: 'anthropic/claude-sonnet-4-6', name: 'Claude Sonnet 4.6', description: 'Best speed + intelligence, $3/$15 per MTok' },
+    { id: 'openai/gpt-4o-mini', name: 'Claude Sonnet 4.6', description: 'Best speed + intelligence, $3/$15 per MTok' },
     { id: 'anthropic/claude-opus-4-6', name: 'Claude Opus 4.6', description: 'Most intelligent, best for agents, $5/$25 per MTok' },
     { id: 'anthropic/claude-haiku-4-5', name: 'Claude Haiku 4.5', description: 'Fastest, near-frontier, $1/$5 per MTok' },
     { id: 'anthropic/claude-sonnet-4-5', name: 'Claude Sonnet 4.5 (Legacy)', description: 'Previous gen Sonnet, $3/$15 per MTok' },
@@ -233,7 +233,7 @@ function createSandbox(account, overrides = {}) {
     name: overrides.name || account.name || `Sandbox ${account.id}`,
     agent: {
       activeAgentId: overrides.agent?.activeAgentId || overrides.activeAgentId || 'default',
-      model: overrides.agent?.model || overrides.activeModel || 'anthropic/claude-sonnet-4-6',
+      model: overrides.agent?.model || overrides.activeModel || 'openai/gpt-4o-mini',
       overrides: {
         ...DEFAULT_AGENT_OVERRIDES,
         ...(overrides.agent?.overrides || {}),
@@ -255,7 +255,7 @@ function createDefaultConfig() {
 
     // Legacy compatibility aliases. Keep mirrored during migration.
     activeAgentId: 'default',
-    activeModel: 'anthropic/claude-sonnet-4-6',
+    activeModel: 'openai/gpt-4o-mini',
     heartbeat: { ...DEFAULT_HEARTBEAT },
     permissions: { ...DEFAULT_PERMISSIONS },
     plugins: mergePlugins(),
@@ -265,7 +265,7 @@ function createDefaultConfig() {
     agents: defaultAgents(),
     strategies: defaultStrategies(),
     manager: {
-      model: 'anthropic/claude-sonnet-4-6',
+      model: 'openai/gpt-4o-mini',
       customPrompt: '',
     },
     models: defaultModels(),
@@ -292,7 +292,7 @@ function mergeSandbox(sandbox, fallback = {}) {
     ...sandbox,
     agent: {
       activeAgentId: sandbox?.agent?.activeAgentId || fallback.activeAgentId || 'default',
-      model: sandbox?.agent?.model || fallback.activeModel || 'anthropic/claude-sonnet-4-6',
+      model: sandbox?.agent?.model || fallback.activeModel || 'openai/gpt-4o-mini',
       overrides: {
         ...DEFAULT_AGENT_OVERRIDES,
         ...(sandbox?.agent?.overrides || {}),
